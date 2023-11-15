@@ -1,6 +1,7 @@
 <?php
 namespace Worksection\SDK;
 
+use Worksection\SDK\Entity\ProjectsEntity;
 use Worksection\SDK\Exception\SdkException;
 
 class EntityBuilder
@@ -82,11 +83,14 @@ class EntityBuilder
 	}
 
 
-	public function createProjectsEntity()
+	/**
+	 * @return ProjectsEntity
+	 * @throws SdkException
+	 */
+	public function createProjectsEntity(): ProjectsEntity
 	{
-
+		return new ProjectsEntity($this->configWrap());
 	}
-
 
 
 	/**
@@ -100,13 +104,9 @@ class EntityBuilder
 			'base_uri' => $this->_baseUri
 		];
 		if ($this->_adminToken) {
-			$config = [
-				'admin_token' => $this->_adminToken
-			];
+			$config['admin_token'] = $this->_adminToken;
 		} elseif ($this->_accessToken) {
-			$config = [
-				'access_token' => $this->_accessToken
-			];
+			$config['access_token'] = $this->_accessToken;
 			if ($this->_refreshToken) {
 				$config['refresh_token'] = $this->_refreshToken;
 			}

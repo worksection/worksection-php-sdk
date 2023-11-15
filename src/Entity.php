@@ -2,6 +2,7 @@
 namespace Worksection\SDK;
 
 use Worksection\SDK\Exception\SdkException;
+use GuzzleHttp\Client as GuzzleHttpClient;
 
 class Entity
 {
@@ -30,7 +31,7 @@ class Entity
 
 
 	/**
-	 * @var GuzzleHttp\Client
+	 * @var GuzzleHttpClient
 	 */
 	private $client;
 
@@ -47,7 +48,7 @@ class Entity
 	public function __construct(array $config)
 	{
 		if (isset($config['base_uri'])) {
-			$this->_baseUri = preg_replace('\/$', '', $config['base_uri']);
+			$this->_baseUri = preg_replace('/\/$/', '', $config['base_uri']);
 		} else {
 			throw new SdkException('base_uri is required.');
 		}
@@ -63,7 +64,7 @@ class Entity
 		}
 
 
-		$this->client = new GuzzleHttp\Client([
+		$this->client = new GuzzleHttpClient([
 			'base_uri' => $this->_baseUri,
 			'timeout' => 5.0
 		]);
@@ -72,10 +73,10 @@ class Entity
 
 	/**
 	 * @param array $params
-	 * @return mixed
+	 * @return array
 	 * @throws SdkException
 	 */
-	protected function request(array $params)
+	protected function request(array $params): array
 	{
 		if (!isset($params['action'])) {
 			throw new SdkException('action is required.');
@@ -99,9 +100,9 @@ class Entity
 		}
 
 		$content = $response->getBody()->getContents();
-		$tmp = \json_decode($content, true);
-		if ($tmp && isset($tmp['status']) && ($tmp['status'] == 'ok' || $tmp['status'] == 'error')) {
-			return $response;
+		$result = \json_decode($content, true);
+		if ($result && isset($result['status']) && ($result['status'] == 'ok' || $result['status'] == 'error')) {
+			return $result;
 		} else {
 			throw new SdkException('Something wrong, return wrong string: ' . $content);
 		}
