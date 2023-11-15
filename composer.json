@@ -1,0 +1,23 @@
+{
+    "name": "worksection/worksection-sdk",
+    "description": "Worksection SDK library to use API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vadym Dorokh",
+            "email": "vadymski@gmail.com",
+            "role": "Distributor"
+        }
+    ],
+    "version": "1.0.0",
+    "require": {
+        "php": ">=7.2",
+        "guzzlehttp/guzzle": "^7.0",
+        "league/oauth2-client": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Worksection\\SDK\\": "src/"
+        }
+    }
+}
