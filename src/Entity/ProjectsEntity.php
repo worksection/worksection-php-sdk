@@ -88,7 +88,7 @@ class ProjectsEntity extends Entity
 	 *                                          Possible value: `options`
 	 *                          max_time      - time estimates
 	 *                          max_money     - financial estimates
-	 *                          tags          - set project statuses/labels. You can specify names (if they are unique) or their IDs (can be obtained throught get_project_tags method)
+	 *                          tags          - set project statuses/labels. You can specify names (if they are unique) or their IDs (can be obtained through get_project_tags method)
 	 *                                          Example value: `TAG1,TAG2`
 	 *
 	 * 							List of project restriction options (set value `1` to enable):

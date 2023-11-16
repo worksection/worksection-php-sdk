@@ -10,7 +10,7 @@ class Entity
 	/**
 	 * @var string
 	 */
-	public static $oauthUri = 'https://worksection.com';
+	public static $oAuth2Url = 'https://worksection.com';
 
 
 	/**
@@ -111,7 +111,7 @@ class Entity
 		$request = json_decode($exec, true);
 
 		if ($code == 401 && $request['message'] == 'Access token is expired' && $this->_autoRefreshToken) {
-			[$exec, $code] = self::curl(self::$oauthUri . '/oauth2/refresh', [
+			[$exec, $code] = self::curl(self::$oAuth2Url . '/oauth2/refresh', [
 				'client_id' => $this->_clientId,
 				'client_secret' => $this->_clientSecret,
 				'grant_type' => 'refresh_token',
@@ -169,5 +169,14 @@ class Entity
 		}
 
 		return [$exec, $code];
+	}
+
+
+	/**
+	 * @param string $url
+	 */
+	public static function setOAuth2Url(string $url): void
+	{
+		self::$oAuth2Url = $url;
 	}
 }

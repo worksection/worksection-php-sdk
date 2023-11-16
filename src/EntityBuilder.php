@@ -169,7 +169,7 @@ class EntityBuilder
 	 */
 	public static function refreshToken(string $clientId, string $clientSecret, string $token): array
 	{
-		[$exec, $code] = Entity::curl(Entity::$oauthUri . '/oauth2/refresh', [
+		[$exec, $code] = Entity::curl(Entity::$oAuth2Url . '/oauth2/refresh', [
 			'client_id' => $clientId,
 			'client_secret' => $clientSecret,
 			'grant_type' => 'refresh_token',
