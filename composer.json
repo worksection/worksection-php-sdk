@@ -9,11 +9,11 @@
             "role": "Distributor"
         }
     ],
-    "version": "1.2.0",
+    "version": "1.3.0",
     "require": {
         "php": ">=7.2",
-        "guzzlehttp/guzzle": "^6.5",
-        "league/oauth2-client": "^2.0"
+        "ext-curl": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

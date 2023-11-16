@@ -2,10 +2,17 @@
 namespace Worksection\SDK;
 
 use Worksection\SDK\Exception\SdkException;
-use GuzzleHttp\Client as GuzzleHttpClient;
+use Exception;
+use function json_decode;
 
 class Entity
 {
+	/**
+	 * @var string
+	 */
+	public static $oauthUri = 'https://worksection.com';
+
+
 	/**
 	 * @var string
 	 */
@@ -31,15 +38,21 @@ class Entity
 
 
 	/**
-	 * @var GuzzleHttpClient
+	 * @var string
 	 */
-	private $client;
+	private $_clientId;
 
 
 	/**
 	 * @var string
 	 */
-	protected $action;
+	private $_clientSecret;
+
+
+	/**
+	 * @var bool
+	 */
+	private $_autoRefreshToken;
 
 
 	/**
@@ -56,22 +69,22 @@ class Entity
 			$this->_adminToken = $config['admin_token'];
 		} elseif (isset($config['access_token'])) {
 			$this->_accessToken = $config['access_token'];
-			if (isset($config['refresh_token'])) {
+			if (isset($config['auto_refresh_token'])) {
+				$this->_autoRefreshToken = $config['auto_refresh_token'];
 				$this->_refreshToken = $config['refresh_token'];
+				$this->_clientId = $config['client_id'];
+				$this->_clientSecret = $config['client_secret'];
 			}
 		} else {
 			throw new SdkException('admin_token or access_token are required, use setAdminToken, setAccessToken methods.');
 		}
-
-
-		$this->client = new GuzzleHttpClient([
-			'base_uri' => $this->_baseUri,
-			'timeout' => 5.0
-		]);
 	}
 
 
 	/**
+	 * Return request response. For OAuth2 (using access_token), if autoRefreshToken is enabled:
+	 *                          - make request with new access_token (obtained through oauth2/refresh method)
+	 *                          - return new access_token and refresh_token in array response
 	 * @param array $params
 	 * @return array
 	 * @throws SdkException
@@ -81,7 +94,6 @@ class Entity
 		if (!isset($params['action'])) {
 			throw new SdkException('action is required.');
 		}
-
 		if ($this->_adminToken) {
 			if (isset($params['page'])) {
 				$hash = md5($params['page'] . $params['action'] . $this->_adminToken);
@@ -89,22 +101,73 @@ class Entity
 				$hash = md5($params['action'] . $this->_adminToken);
 			}
 			$params['hash'] = $hash;
-			$response = $this->client->request('POST', '/api/admin/v2', [
-				'query' => $params
-			]);
+			$uri = '/api/admin/v2';
 		} else {
 			$params['access_token'] = $this->_accessToken;
-			$response = $this->client->request('POST', 'api/oauth2/', [
-				'query' => $params
-			]);
+			$uri = '/api/oauth2/';
 		}
 
-		$content = $response->getBody()->getContents();
-		$result = \json_decode($content, true);
-		if ($result && isset($result['status']) && ($result['status'] == 'ok' || $result['status'] == 'error')) {
-			return $result;
+		[$exec, $code] = self::curl($this->_baseUri . $uri, $params);
+		$request = json_decode($exec, true);
+
+		if ($code == 401 && $request['message'] == 'Access token is expired' && $this->_autoRefreshToken) {
+			[$exec, $code] = self::curl(self::$oauthUri . '/oauth2/refresh', [
+				'client_id' => $this->_clientId,
+				'client_secret' => $this->_clientSecret,
+				'grant_type' => 'refresh_token',
+				'refresh_token' => $this->_refreshToken
+			]);
+			$result = $request;
+
+			$request = json_decode($exec, true);
+			if ($request['access_token'] && $request['refresh_token']) {
+				$params['access_token'] = $request['access_token'];
+				$params['refresh_token'] = $request['refresh_token'];
+				[$exec, $code] = self::curl($this->_baseUri . $uri, $params);
+				$request = json_decode($exec, true);
+				if (isset($request['status']) && ($request['status'] == 'ok' || $request['status'] == 'error')) {
+					$result = $request;
+					$result['access_token'] = $params['access_token'];
+					$result['refresh_token'] = $params['refresh_token'];
+				} else {
+					throw new SdkException('Something wrong, return wrong string: ' . $exec);
+				}
+			} elseif ($request['error'] == 'invalid_request' && $request['errorDescription']) {
+				$result['refresh_status'] = $request['error'];
+				$result['refresh_message'] = $request['errorDescription'];
+			}
+		} elseif (isset($request['status']) && ($request['status'] == 'ok' || $request['status'] == 'error')) {
+			$result = $request;
 		} else {
-			throw new SdkException('Something wrong, return wrong string: ' . $content);
+			throw new SdkException('Something wrong, return wrong string: ' . $exec);
 		}
+
+		return $result;
+	}
+
+
+	/**
+	 * @param string $url
+	 * @param array $params
+	 * @return array
+	 * @throws SdkException
+	 */
+	public static function curl(string $url, array $params): array
+	{
+		try {
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+			$exec = curl_exec($ch);
+			$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			curl_close($ch);
+		} catch (Exception $e) {
+			throw new SdkException('CURL error, return wrong string: ' . $e->getMessage());
+		}
+
+		return [$exec, $code];
 	}
 }
