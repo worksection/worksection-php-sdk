@@ -18,6 +18,10 @@ class TasksEntity extends Entity
 		'update_task' => [
 			'email_user_to', 'priority', 'title', 'datestart',
 			'dateend', 'dateclosed', 'max_time', 'max_money'
+		],
+		'update_subtask' => [
+			'email_user_to', 'priority', 'title', 'datestart',
+			'dateend', 'dateclosed', 'max_time', 'max_money'
 		]
 	];
 
@@ -115,7 +119,7 @@ class TasksEntity extends Entity
 	 * Creates a task in a specified project, regardless of its status (active, sleeping, archived)
 	 *
 	 * @param string $title             Required. Task name
-	 * @param string $email_user_from   Required. Task author email
+	 * @param string $emailUserFrom   Required. Task author email
 	 * @param array $optional           Optional. Optional parameters in array, possible keys and values:
 	 *                                  email_user_to - task executive email
 	 *                                                  Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned"
@@ -135,13 +139,13 @@ class TasksEntity extends Entity
 	 * @return array
 	 * @throws SdkException
 	 */
-	public function post_task(string $title, string $email_user_from, array $optional = []): array
+	public function post_task(string $title, string $emailUserFrom, array $optional = []): array
 	{
 		$action = __FUNCTION__;
 		$params = [
 			'action' => $action,
 			'title'  => $title,
-			'email_user_from' => $email_user_from
+			'email_user_from' => $emailUserFrom
 		];
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {
@@ -160,7 +164,7 @@ class TasksEntity extends Entity
 	 * This request allows adding files to a subtask description
 	 *
 	 * @param string $title             Required. Subtask name
-	 * @param string $email_user_from   Required. Subtask author email
+	 * @param string $emailUserFrom   Required. Subtask author email
 	 * @param array $optional           Optional. Optional parameters in array, possible keys and values:
 	 *                                  email_user_to - subtask executive email
 	 *                                                  Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned"
@@ -178,13 +182,13 @@ class TasksEntity extends Entity
 	 * @return array
 	 * @throws SdkException
 	 */
-	public function post_subtask(string $title, string $email_user_from, array $optional = []): array
+	public function post_subtask(string $title, string $emailUserFrom, array $optional = []): array
 	{
 		$action = __FUNCTION__;
 		$params = [
 			'action' => $action,
 			'title'  => $title,
-			'email_user_from' => $email_user_from
+			'email_user_from' => $emailUserFrom
 		];
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {
@@ -362,14 +366,14 @@ class TasksEntity extends Entity
 	 *
 	 * At least one of the following parameters is required:
 	 * @param int $projectId            Optional. Project ID
-	 * @param string $email_user_from   Optional. Task author email
-	 * @param string $email_user_to     Optional. Task executive email
+	 * @param string $emailUserFrom   Optional. Task author email
+	 * @param string $emailUserTo     Optional. Task executive email
 	 * @param string $filter            Optional. Search query (see description below):
 	 *                                  Possible data for use in filter (for search_tasks method)
 	 *									Integer fields:
-	 *									    id=TASK_ID         - returns data of a specific task/subtask by its ID (can be obtained through get_all_tasks or get_tasks methods)
-	 *									    project=PROJECT_ID - returns data on tasks of a certain project by its ID (can be obtained through the get_projects method)
-	 *									    parent=TASK_ID     - returns data on subtasks of a certain parent task by its ID (can be obtained through get_all_tasks or get_tasks methods)
+	 *									    id=<TASK_ID>         - returns data of a specific task/subtask by its ID (can be obtained through get_all_tasks or get_tasks methods)
+	 *									    project=<PROJECT_ID> - returns data on tasks of a certain project by its ID (can be obtained through the get_projects method)
+	 *									    parent=<TASK_ID>     - returns data on subtasks of a certain parent task by its ID (can be obtained through get_all_tasks or get_tasks methods)
 	 *                                  Equality and range operators for integer fields: =, in, example: `project{=}2456`, `id {in} (1234, 1240)`
 	 *                                  String fields:
 	 *                                      name - task name
@@ -386,10 +390,10 @@ class TasksEntity extends Entity
 	 * @return array
 	 * @throws SdkException
 	 */
-	public function search_tasks(int $projectId = 0, string $email_user_from = '', string $email_user_to = '', string $filter = '', string $status = ''): array
+	public function search_tasks(int $projectId = 0, string $emailUserFrom = '', string $emailUserTo = '', string $filter = '', string $status = ''): array
 	{
 		$action = __FUNCTION__;
-		$params = compact('action', 'email_user_from', 'email_user_to', 'filter', 'status');
+		$params = compact('action', 'emailUserFrom', 'emailUserTo', 'filter', 'status');
 		if ($projectId) {
 			$page = '/project/' . $projectId . '/';
 			$params['page'] = $page;

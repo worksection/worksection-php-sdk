@@ -1,7 +1,13 @@
 <?php
 namespace Worksection\SDK;
 
+use Worksection\SDK\Entity\CommentsEntity;
+use Worksection\SDK\Entity\CostsEntity;
+use Worksection\SDK\Entity\FilesEntity;
+use Worksection\SDK\Entity\MembersEntity;
 use Worksection\SDK\Entity\ProjectsEntity;
+use Worksection\SDK\Entity\TagsEntity;
+use Worksection\SDK\Entity\TasksEntity;
 use Worksection\SDK\Exception\SdkException;
 
 class EntityBuilder
@@ -112,6 +118,66 @@ class EntityBuilder
 	public function createProjectsEntity(): ProjectsEntity
 	{
 		return new ProjectsEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return TasksEntity
+	 * @throws SdkException
+	 */
+	public function createTasksEntity(): TasksEntity
+	{
+		return new TasksEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return MembersEntity
+	 * @throws SdkException
+	 */
+	public function createMembersEntity(): MembersEntity
+	{
+		return new MembersEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return CommentsEntity
+	 * @throws SdkException
+	 */
+	public function createCommentsEntity(): CommentsEntity
+	{
+		return new CommentsEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return CostsEntity
+	 * @throws SdkException
+	 */
+	public function createCostsEntity(): CostsEntity
+	{
+		return new CostsEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return TagsEntity
+	 * @throws SdkException
+	 */
+	public function createTagsEntity(): TagsEntity
+	{
+		return new TagsEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return FilesEntity
+	 * @throws SdkException
+	 */
+	public function createFilesEntity(): FilesEntity
+	{
+		return new FilesEntity($this->configWrap());
 	}
 
 
