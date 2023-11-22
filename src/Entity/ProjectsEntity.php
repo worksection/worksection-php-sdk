@@ -32,12 +32,13 @@ class ProjectsEntity extends Entity
 	/**
 	 * Returns data on all projects
 	 *
-	 * @param string $filter   Optional. Returns data for a project in a specified status (active/sleeping/archived)
-	 *                         Possible values: `active`, `pending`, `archive`
-	 * @param string $extra    Optional. Returns additional project data (can be specified with commas)
-	 *                         Possible values: `text`, `options`, `users`
+	 * @param string $filter   Optional. Returns data for a project in a specified status (active/sleeping/archived) <br>
+	 *                         Possible values: `active`, `pending`, `archive` <br>
+	 * @param string $extra    Optional. Returns additional project data (can be specified with commas) <br>
+	 *                         Possible values: `text`, `options`, `users` <br>
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function get_projects(string $filter = '', string $extra = ''): array
 	{
@@ -57,13 +58,13 @@ class ProjectsEntity extends Entity
 	 * @param int $projectId   Required. Project ID
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function close_project(int $projectId): array
 	{
 		$action = __FUNCTION__;
 		$page = '/project/' . $projectId . '/';
 		$params = compact('action', 'page');
-
 		return $this->request($params);
 	}
 
@@ -75,39 +76,39 @@ class ProjectsEntity extends Entity
 	 *
 	 * @param string $title     Required. Project name
 	 * @param array $optional   Optional. Optional parameters in array, possible keys and values:
-	 *                          email_user_from - project author email
-	 *                          email_manager - project manager email
-	 *                          email_user_to - user email, who will be set as a task executive by default
-	 *                                          Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned"
-	 *                          members       - comma separated list of project member emails
-	 *                          text          - project description
-	 *                          company       - folder name, where the project will be located
-	 *                          datestart     - start date in DD.MM.YYYY format
-	 *                          dateend       - due date or end date in DD.MM.YYYY format
-	 *                          extra         - returns a dataset on project restriction options.
-	 *                                          Possible value: `options`
-	 *                          max_time      - time estimates
-	 *                          max_money     - financial estimates
-	 *                          tags          - set project statuses/labels. You can specify names (if they are unique) or their IDs (can be obtained through get_project_tags method)
-	 *                                          Example value: `TAG1,TAG2`
+	 *                          email_user_from - project author email <br>
+	 *                          email_manager - project manager email <br>
+	 *                          email_user_to - user email, who will be set as a task executive by default <br>
+	 *                                          Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned" <br>
+	 *                          members       - comma separated list of project member emails <br>
+	 *                          text          - project description <br>
+	 *                          company       - folder name, where the project will be located <br>
+	 *                          datestart     - start date in DD.MM.YYYY format <br>
+	 *                          dateend       - due date or end date in DD.MM.YYYY format <br>
+	 *                          extra         - returns a dataset on project restriction options. Possible value: `options` <br>
+	 *                          max_time      - time estimates <br>
+	 *                          max_money     - financial estimates <br>
+	 *                          tags          - set project statuses/labels. You can specify names (if they are unique) or their IDs (can be obtained through get_project_tags method). <br>
+	 *                                          Example value: `TAG1,TAG2` <br>
 	 *
-	 * 							List of project restriction options (set value `1` to enable):
-	 *                          options.allow_close        - mark task as done
-	 *                          options.allow_give         - transfer the responsibility
-	 *                          options.allow_term         - change the task terms
-	 *                          options.allow_limit        - change the estimates
-	 *                          options.require_term       - terms
-	 *                          options.require_tag        - stages and labels
-	 *                          options.require_limit      - estimates
-	 *                          options.require_hidden     - visibility
-	 *                          options.deny_comments_edit - edit and delete comments
-	 *                          options.deny_task_edit     - edit and delete tasks
-	 *                          options.deny_task_delete   - delete tasks
-	 *                          options.time_require       - mark as done with costs only
-	 *                          options.time_today         - add for today only
-	 *                          options.timer_only         - add from timer only
+	 * 							List of project restriction options (set value `1` to enable): <br>
+	 *                          options.allow_close        - mark task as done <br>
+	 *                          options.allow_give         - transfer the responsibility <br>
+	 *                          options.allow_term         - change the task terms <br>
+	 *                          options.allow_limit        - change the estimates <br>
+	 *                          options.require_term       - terms <br>
+	 *                          options.require_tag        - stages and labels <br>
+	 *                          options.require_limit      - estimates <br>
+	 *                          options.require_hidden     - visibility <br>
+	 *                          options.deny_comments_edit - edit and delete comments <br>
+	 *                          options.deny_task_edit     - edit and delete tasks <br>
+	 *                          options.deny_task_delete   - delete tasks <br>
+	 *                          options.time_require       - mark as done with costs only <br>
+	 *                          options.time_today         - add for today only <br>
+	 *                          options.timer_only         - add from timer only <br>
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function post_project(string $title, array $optional = []): array
 	{
@@ -131,37 +132,38 @@ class ProjectsEntity extends Entity
 	 * Updates number of parameters for a specified active project
 	 * All optional parameters are available for updating
 	 *
-	 * @param int $projectId
-	 * @param array $optional Optional. Optional parameters in array, possible keys and values:
-	 *                           email_manager - project manager email
-	 *                           email_user_to - user email, who will be set as a task executive by default
-	 *                                           Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned"
-	 *                           members       - comma separated list of project member emails
-	 *                           title         - project name
-	 *                           datestart     - start date in DD.MM.YYYY format
-	 *                           dateend       - due date or end date in DD.MM.YYYY format
-	 *                           extra         - returns a dataset on project restriction options.
-	 *                                           Possible value: `options`
-	 *                           max_time      - time estimates
-	 *                           max_money     - financial estimates
+	 * @param int $projectId     Required. Project ID
+	 * @param array $optional    Optional. Optional parameters in array, possible keys and values:
+	 *                           email_manager - project manager email <br>
+	 *                           email_user_to - user email, who will be set as a task executive by default <br>
+	 *                                           Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned" <br>
+	 *                           members       - comma separated list of project member emails <br>
+	 *                           title         - project name <br>
+	 *                           datestart     - start date in DD.MM.YYYY format <br>
+	 *                           dateend       - due date or end date in DD.MM.YYYY format <br>
+	 *                           extra         - returns a dataset on project restriction options. <br>
+	 *                                           Possible value: `options` <br>
+	 *                           max_time      - time estimates <br>
+	 *                           max_money     - financial estimates <br>
 	 *
-	 *                           List of project restriction options (set value `1` to enable):
-	 *                           options.allow_close        - mark task as done
-	 *                           options.allow_give         - transfer the responsibility
-	 *                           options.allow_term         - change the task terms
-	 *                           options.allow_limit        - change the estimates
-	 *                           options.require_term       - terms
-	 *                           options.require_tag        - stages and labels
-	 *                           options.require_limit      - estimates
-	 *                           options.require_hidden     - visibility
-	 *                           options.deny_comments_edit - edit and delete comments
-	 *                           options.deny_task_edit     - edit and delete tasks
-	 *                           options.deny_task_delete   - delete tasks
-	 *                           options.time_require       - mark as done with costs only
-	 *                           options.time_today         - add for today only
-	 *                           options.timer_only         - add from timer only
+	 *                           List of project restriction options (set value `1` to enable): <br>
+	 *                           options.allow_close        - mark task as done <br>
+	 *                           options.allow_give         - transfer the responsibility <br>
+	 *                           options.allow_term         - change the task terms <br>
+	 *                           options.allow_limit        - change the estimates <br>
+	 *                           options.require_term       - terms <br>
+	 *                           options.require_tag        - stages and labels <br>
+	 *                           options.require_limit      - estimates <br>
+	 *                           options.require_hidden     - visibility <br>
+	 *                           options.deny_comments_edit - edit and delete comments <br>
+	 *                           options.deny_task_edit     - edit and delete tasks <br>
+	 *                           options.deny_task_delete   - delete tasks <br>
+	 *                           options.time_require       - mark as done with costs only <br>
+	 *                           options.time_today         - add for today only <br>
+	 *                           options.timer_only         - add from timer only <br>
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function update_project(int $projectId, array $optional = []): array
 	{
@@ -187,6 +189,7 @@ class ProjectsEntity extends Entity
 	 *
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function get_project_groups(): array
 	{
@@ -205,6 +208,7 @@ class ProjectsEntity extends Entity
 	 * @param string $title   Required. Project folder name
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function add_project_group(string $title): array
 	{
@@ -218,10 +222,11 @@ class ProjectsEntity extends Entity
 
 	/**
 	 * @param int $projectId  Required. Project ID
-	 * @param string $extra   Optional. Returns additional project data (can be specified with commas)
-	 *                        Possible values: `text` or `html`, `options`
+	 * @param string $extra   Optional. Returns additional project data (can be specified with commas) <br>
+	 *                        Possible values: `text` or `html`, `options` <br>
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function get_project(int $projectId, string $extra = ''): array
 	{
@@ -242,6 +247,7 @@ class ProjectsEntity extends Entity
 	 * @param string $members  Required. Comma separated list of user emails to be added
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function add_project_members(int $projectId, string $members): array
 	{
@@ -261,6 +267,7 @@ class ProjectsEntity extends Entity
 	 * @param string $members  Required. Comma separated list of user emails to be removed
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function delete_project_members(int $projectId, string $members): array
 	{
@@ -280,6 +287,7 @@ class ProjectsEntity extends Entity
 	 * @param int $projectId   Required. Project ID
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-projects.html
 	 */
 	public function activate_project(int $projectId): array
 	{

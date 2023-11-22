@@ -7,6 +7,7 @@ use Worksection\SDK\Exception\SdkException;
 class FilesEntity extends Entity
 {
 	/**
+	 * @link https://worksection.com/en/faq/api-files.html
 	 * To add files, use POST requests with each file transferred as a separate parameter named attach (n), where n is any seed value (see code example below).
 	 *
 	 * Files can be added in the following methods:
@@ -31,6 +32,7 @@ class FilesEntity extends Entity
 		*/
 
 
+
 	/**
 	 * Allows downloading files attached to a task/subtask description or in comments
 	 * Method does not apply to files attached to project descriptions or uploaded directly into the Files section
@@ -38,6 +40,7 @@ class FilesEntity extends Entity
 	 * @param int $fileId    Required. File ID can be obtained through get_task, get_tasks, get_all_tasks, get_comments requests using the extra=files parameter
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-files.html
 	 */
 	public function download(int $fileId): array
 	{
@@ -47,7 +50,6 @@ class FilesEntity extends Entity
 			'action' => $action,
 			'page' => $page
 		];
-
 
 		return $this->request($params);
 	}

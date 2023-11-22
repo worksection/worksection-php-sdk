@@ -22,6 +22,7 @@ class MembersEntity extends Entity
 	 *
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function get_users(): array
 	{
@@ -38,6 +39,7 @@ class MembersEntity extends Entity
 	 *
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function get_contacts(): array
 	{
@@ -54,14 +56,15 @@ class MembersEntity extends Entity
 	 *
 	 * @param string $email    Required. User email
 	 * @param array $optional  Optional. Optional parameters in array, possible keys and values:
-	 *                         first_name - user first name
-	 *                         last_name  - user last name
-	 *                         title      - user position
-	 *                         group      - team name
-	 *                         department - department name
-	 *                         role       - user role. Available options: `user`, `guest`, `reader`
+	 *                         first_name - user first name <br>
+	 *                         last_name  - user last name <br>
+	 *                         title      - user position <br>
+	 *                         group      - team name <br>
+	 *                         department - department name <br>
+	 *                         role       - user role. Available options: `user`, `guest`, `reader` <br>
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function add_user(string $email, array $optional = []): array
 	{
@@ -87,16 +90,17 @@ class MembersEntity extends Entity
 	 * @param string $email    Required. Email of the contact
 	 * @param string $name     Required. First and last name of the contact
 	 * @param array $optional  Optional. Optional parameters in array, possible keys and values:
-	 *                         title - position
-	 *                         group - folder name
-	 *                         phone - phone number
-	 *                         phone2 - office phone number
-	 *                         phone3 - mobile phone number
-	 *                         phone4 - home phone number
-	 *                         address - address
-	 *                         address2 - additional address
+	 *                         title - position <br>
+	 *                         group - folder name <br>
+	 *                         phone - phone number <br>
+	 *                         phone2 - office phone number <br>
+	 *                         phone3 - mobile phone number <br>
+	 *                         phone4 - home phone number <br>
+	 *                         address - address <br>
+	 *                         address2 - additional address <br>
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function add_contact(string $email, string $name, array $optional = []): array
 	{
@@ -125,6 +129,7 @@ class MembersEntity extends Entity
 	 * @param string $emailUser   Required. User email, who needs to be subscribed from a task
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function subscribe(int $projectId, int $taskId, string $emailUser): array
 	{
@@ -145,6 +150,7 @@ class MembersEntity extends Entity
 	 * @param string $emailUser   Required. User email, who needs to be unsubscribed from a task
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function unsubscribe(int $projectId, int $taskId, string $emailUser): array
 	{
@@ -164,6 +170,7 @@ class MembersEntity extends Entity
 	 * @param mixed $client   Optional. `1` for an external client team and `0` for your company team
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function add_user_group(string $title, int $client = null): array
 	{
@@ -182,6 +189,7 @@ class MembersEntity extends Entity
 	 * @param string $title   Required. Folder name for contacts
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function add_contact_group(string $title): array
 	{
@@ -198,6 +206,7 @@ class MembersEntity extends Entity
 	 *
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function get_user_groups(): array
 	{
@@ -214,6 +223,7 @@ class MembersEntity extends Entity
 	 *
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-user.html
 	 */
 	public function get_contact_groups(): array
 	{

@@ -22,6 +22,7 @@ class CommentsEntity extends Entity
 	 * @param string $extra    Optional. Returns information about files attached to comments. Possible value: `files`
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-comments.html
 	 */
 	public function get_comments(int $projectId, int $taskId, int $subtaskId = 0, string $extra = ''): array
 	{
@@ -46,10 +47,11 @@ class CommentsEntity extends Entity
 	 * @param int $taskId             Required. Task ID
 	 * @param int $subtaskId          Optional. Subtask ID
 	 * @param array $optional         Optional. Optional parameters in array, possible keys and values:
-	 *                                hidden - comma separated list of user emails, who will have access to this comment, while it will be hidden for others
-	 *                                mention - comma separated list of user emails, who will be mentioned at the end* of the comment
+	 *                                hidden - comma separated list of user emails, who will have access to this comment, while it will be hidden for others <br>
+	 *                                mention - comma separated list of user emails, who will be mentioned at the end* of the comment <br>
 	 * @return array
 	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-comments.html
 	 */
 	public function post_comment(string $emailUserFrom, string $text, int $projectId, int $taskId, int $subtaskId = 0, array $optional = []): array
 	{
