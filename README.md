@@ -10,7 +10,7 @@ composer require worksection/worksection-sdk
 
 
 ## Usage
-####To get access to Worksection API you can use admin token API ([how to get token](https://worksection.com/en/faq/api-start.html))
+To get access to Worksection API you can use admin token API ([how to get token](https://worksection.com/en/faq/api-start.html))
 ```php
 use Worksection\SDK\EntityBuilder;
 use Worksection\SDK\Exception\SdkException;
@@ -19,34 +19,34 @@ $sdk = EntityBuilder::getInstance('https://myaccount.worksection.com/');
 $sdk->setAdminToken('0da9fa4321ghm887530cfb8w3m57d3f4');
 
 try {
-	$projectsEntity = $sdk->createProjectsEntity(); // Entity for using projects api methods
-	$tasksEntity = $sdk->createTasksEntity();       // Entity for using tasks api methods
-	$membersEntity = $sdk->createMembersEntity();   // Entity for using members api methods
-	$commentsEntity = $sdk->createCommentsEntity()  // Entity for using comments api methods
-	$tagsEntity = $sdk->createTagsEntity();         // Entity for using tags api methods
-	$costsEntity = $sdk->createCostsEntity();       // Entity for using costs api methods
-	$filesEntity = $sdk->createFilesEntity();       // Entity for using files api methods
-	
-	// Example of usage (returns data on all projects)
-	$result = $projectsEntity->get_projects();
-	
-	// Example of usage (creates a project)
-	$result = $projectsEntity->post_project('New Test Project', [
-	    'email_user_from' => 'myemail@gmail.com',
-	    'email_manager'   => 'myemail@gmail.com',
-	    'text'            => 'Description of project',
-	    'datestart'       => '29.12.2023',
-	    'dateend'         => '29.12.2024'
+    $projectsEntity = $sdk->createProjectsEntity(); // Entity for using projects api methods
+    $tasksEntity = $sdk->createTasksEntity();       // Entity for using tasks api methods
+    $membersEntity = $sdk->createMembersEntity();   // Entity for using members api methods
+    $commentsEntity = $sdk->createCommentsEntity()  // Entity for using comments api methods
+    $tagsEntity = $sdk->createTagsEntity();         // Entity for using tags api methods
+    $costsEntity = $sdk->createCostsEntity();       // Entity for using costs api methods
+    $filesEntity = $sdk->createFilesEntity();       // Entity for using files api methods
+    
+    // Example of usage (returns data on all projects)
+    $result = $projectsEntity->get_projects();
+    
+    // Example of usage (creates a project)
+    $result = $projectsEntity->post_project('New Test Project', [
+        'email_user_from' => 'myemail@gmail.com',
+        'email_manager'   => 'myemail@gmail.com',
+        'text'            => 'Description of project',
+        'datestart'       => '29.12.2023',
+        'dateend'         => '29.12.2024'
     ]);
     
     // Example of usage (closes the specified task (100500 id task in 100 id project)
     $result = $tasksEntity->complete_task(100, 100500);
 
 } catch (SdkException $e) {
-	// work with errors
+    // work with errors
 }
 ```
-####To get access to Worksection API you can use Oauth2 flow and access token ([how it works](https://worksection.com/en/faq/oauth.html))
+To get access to Worksection API you can use Oauth2 flow and access token ([how it works](https://worksection.com/en/faq/oauth.html))
 ```php
 use Worksection\SDK\EntityBuilder;
 use Worksection\SDK\Exception\SdkException;
@@ -55,30 +55,30 @@ $sdk = EntityBuilder::getInstance('https://myaccount.worksection.com/');
 $sdk->setAccessToken('eyJ0eXAiOiJKV...3v3tKTcdp8zg');
 
 try {
-	$projectsEntity = $sdk->createProjectsEntity(); // Entity for using projects api methods
-	$tasksEntity = $sdk->createTasksEntity();       // Entity for using tasks api methods
-	$membersEntity = $sdk->createMembersEntity();   // Entity for using members api methods
-	$commentsEntity = $sdk->createCommentsEntity()  // Entity for using comments api methods
-	$tagsEntity = $sdk->createTagsEntity();         // Entity for using tags api methods
-	$costsEntity = $sdk->createCostsEntity();       // Entity for using costs api methods
-	$filesEntity = $sdk->createFilesEntity();       // Entity for using files api methods
-	
-	// Example of usage (returns data on all open and closed account tasks/subtasks)
-	$result = $tasksEntity->get_all_tasks();
-	
-	// Example of usage (create comments in task)
-	$result = $commentsEntity->post_comment(
-	    'testemail@gmail.com',               // Email user from
-	    'Text of my comment, hello world!',  // Text of comment
-	    500,                                 // Project ID
-	    899                                  // Task ID
-	);
+    $projectsEntity = $sdk->createProjectsEntity(); // Entity for using projects api methods
+    $tasksEntity = $sdk->createTasksEntity();       // Entity for using tasks api methods
+    $membersEntity = $sdk->createMembersEntity();   // Entity for using members api methods
+    $commentsEntity = $sdk->createCommentsEntity()  // Entity for using comments api methods
+    $tagsEntity = $sdk->createTagsEntity();         // Entity for using tags api methods
+    $costsEntity = $sdk->createCostsEntity();       // Entity for using costs api methods
+    $filesEntity = $sdk->createFilesEntity();       // Entity for using files api methods
+    
+    // Example of usage (returns data on all open and closed account tasks/subtasks)
+    $result = $tasksEntity->get_all_tasks();
+    
+    // Example of usage (create comments in task)
+    $result = $commentsEntity->post_comment(
+        'testemail@gmail.com',               // Email user from
+        'Text of my comment, hello world!',  // Text of comment
+        500,                                 // Project ID
+        899                                  // Task ID
+    );
 
 } catch (SdkException $e) {
-	// work with errors
+    // work with errors
 }
 ```
-####To update access token using refresh token you can use method:
+To update access token using refresh token you can use method:
 ```php
 use Worksection\SDK\EntityBuilder;
 use Worksection\SDK\Exception\SdkException;
@@ -99,7 +99,7 @@ $tokensData = EntityBuilder::refreshToken(
   }
  */
 ```
-####Also you can use setAutoRefreshToken method for auto refreshing (only first request, when access token is expired):
+Also you can use setAutoRefreshToken method for auto refreshing (only first request, when access token has expired):
 ```php
 use Worksection\SDK\EntityBuilder;
 use Worksection\SDK\Exception\SdkException;
