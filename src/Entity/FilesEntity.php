@@ -17,7 +17,7 @@ class FilesEntity extends Entity
 	 *
 	 * Sample of adding files in post_task request using PHP (curl) as an example below:
 	 */
-		/*
+	  /*
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL,'https://your—domain.com/api/admin/v2/?action=post_task&page=/project/PROJECT_ID/&email_user_from=USER_EMAIL&email_user_to=USER_EMAIL&hidden=USER_EMAIL,USER_EMAIL&title=TASK_NAME&text=TASK_TEXT&datestart=DD.MM.YYYY&dateend=DD.MM.YYYY&tags=Tag1,Tag2&hash=HASH');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -29,7 +29,7 @@ class FilesEntity extends Entity
 		]);
 		$response = json_decode(curl_exec($curl), true);
 		curl_close($curl);
-		*/
+	  */
 
 
 
@@ -44,12 +44,32 @@ class FilesEntity extends Entity
 	 */
 	public function download(int $fileId): array
 	{
-		$action = __FUNCTION__;
-		$page = '/download/' . $fileId . '/';
 		$params = [
-			'action' => $action,
-			'page' => $page
+			'action' => __FUNCTION__,
+			'id_file' => $fileId
 		];
+
+		return $this->request($params);
+	}
+
+
+
+	/**
+	 * Allows getting list of files in (project description, task/subtask description and comments)
+	 *
+	 * @param int $projectId    Required. Project ID
+	 * @param int $taskId      Optional. Task ID
+	 * @return array
+	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-files.html
+	 */
+	public function get_files(int $projectId, int $taskId = 0): array
+	{
+		$params = [
+			'action' => __FUNCTION__,
+			'id_project' => $projectId
+		];
+		if ($taskId) $params['id_task'] = $taskId;
 
 		return $this->request($params);
 	}

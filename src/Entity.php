@@ -91,6 +91,7 @@ class Entity
 	 */
 	protected function request(array $params): array
 	{
+		$action = $params['action'];
 		if (!isset($params['action'])) {
 			throw new SdkException('action is required.');
 		}
@@ -133,6 +134,8 @@ class Entity
 			}
 		} elseif (isset($request['status']) && ($request['status'] == 'ok' || $request['status'] == 'error')) {
 			$result = $request;
+		} elseif ($action === 'download') {
+			$result = ['data' => $exec];
 		} else {
 			throw new SdkException('Something wrong, return wrong string: ' . $exec);
 		}
@@ -140,19 +143,6 @@ class Entity
 		return $result;
 	}
 
-
-	/**
-	 * @return string
-	 * @throws SdkException
-	 */
-	protected function get_self_email(): string
-	{
-		$result = $this->request([
-			'action' => 'get_users',
-			'is_me_only' => true
-		]);
-		return $result['data']['email'] ?? '';
-	}
 
 
 	/**
@@ -164,10 +154,10 @@ class Entity
 	public static function curl(string $url, array $params): array
 	{
 		try {
-			$ch = curl_init($url);
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url . '?' . http_build_query($params));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 			$exec = curl_exec($ch);

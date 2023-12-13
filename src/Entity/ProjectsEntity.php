@@ -62,9 +62,10 @@ class ProjectsEntity extends Entity
 	 */
 	public function close_project(int $projectId): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/';
-		$params = compact('action', 'page');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_project' => $projectId
+		];
 		return $this->request($params);
 	}
 
@@ -168,10 +169,9 @@ class ProjectsEntity extends Entity
 	public function update_project(int $projectId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/';
 		$params = [
 			'action' => $action,
-			'page'  => $page
+			'id_project' => $projectId
 		];
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {
@@ -230,9 +230,11 @@ class ProjectsEntity extends Entity
 	 */
 	public function get_project(int $projectId, string $extra = ''): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/';
-		$params = compact('action', 'page', 'extra');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_project' => $projectId,
+			'extra' => $extra
+		];
 		$params = array_filter($params);
 
 		return $this->request($params);
@@ -251,9 +253,11 @@ class ProjectsEntity extends Entity
 	 */
 	public function add_project_members(int $projectId, string $members): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/';
-		$params = compact('action', 'page', 'members');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_project' => $projectId,
+			'members' => $members
+		];
 
 		return $this->request($params);
 	}
@@ -271,9 +275,11 @@ class ProjectsEntity extends Entity
 	 */
 	public function delete_project_members(int $projectId, string $members): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/';
-		$params = compact('action', 'page', 'members');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_project' => $projectId,
+			'members' => $members
+		];
 
 		return $this->request($params);
 	}
@@ -291,9 +297,10 @@ class ProjectsEntity extends Entity
 	 */
 	public function activate_project(int $projectId): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/';
-		$params = compact('action', 'page');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_project' => $projectId
+		];
 
 		return $this->request($params);
 	}

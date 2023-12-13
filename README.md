@@ -174,17 +174,13 @@ $result = $projectsEntity->get_projects();
 **[TasksEntity](https://github.com/vadymskk/worksection-sdk/blob/develop/src/Entity/TasksEntity.php)** - [api docs](https://worksection.com/en/faq/api-task.html), methods:
 ```php
 - get_all_tasks(string $filter = '', string $extra = '')
-- get_task(int $projectId, int $taskId, int $subtaskId = 0, string $filter = '', string $extra = '')
+- get_task(int $taskId, string $filter = '', string $extra = '')
 - get_tasks(int $projectId, string $filter = '', string $extra = '')
-- post_task(string $title, string $emailUserFrom, array $optional = [])
-- post_subtask(string $title, string $emailUserFrom, array $optional = [])
-- complete_task(int $projectId, int $taskId)
-- complete_subtask(int $projectId, int $taskId, int $subtaskId)
-- reopen_task(int $projectId, int $taskId)
-- reopen_subtask(int $projectId, int $taskId, int $subtaskId)
-- update_task(int $projectId, int $taskId, array $optional = [])
-- update_subtask(int $projectId, int $taskId, int $subtaskId, array $optional = [])
-- search_tasks(int $projectId = 0, string $emailUserFrom = '', string $emailUserTo = '', string $filter = '', string $status = '')
+- post_task(string $title, int $projectId, array $optional = [])
+- complete_task(int $taskId)
+- reopen_task(int $taskId)
+- update_task(int $taskId, array $optional = [])
+- search_tasks(int $projectId, int $taskId = 0, string $emailUserFrom = '', string $emailUserTo = '', string $filter = '', string $status = '')
 - get_events(string $period, int $projectId = 0)
 ```
 
@@ -204,8 +200,8 @@ $result = $projectsEntity->get_projects();
 
 **[CommentsEntity](https://github.com/vadymskk/worksection-sdk/blob/develop/src/Entity/CommentsEntity.php)** - [api docs](https://worksection.com/en/faq/api-comments.html), methods:
 ```php
-- get_comments(int $projectId, int $taskId, int $subtaskId = 0, string $extra = '')
-- post_comment(string $emailUserFrom, string $text, int $projectId, int $taskId, int $subtaskId = 0, array $optional = [])
+- get_comments(int $taskId, string $extra = '')
+- post_comment(string $text, int $taskId, array $optional = [])
 ```
 
 **[TagsEntity](https://github.com/vadymskk/worksection-sdk/blob/develop/src/Entity/TagsEntity.php)** - [api docs](https://worksection.com/en/faq/api-tags.html), methods:
@@ -234,6 +230,7 @@ $result = $projectsEntity->get_projects();
 **[FilesEntity](https://github.com/vadymskk/worksection-sdk/blob/develop/src/Entity/FilesEntity.php)** - [api docs](https://worksection.com/en/faq/api-files.html), methods:
 ```php
 - download(int $fileId)
+- get_files(int $projectId, int $taskId = 0)
 ```
 
 

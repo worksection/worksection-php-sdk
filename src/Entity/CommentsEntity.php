@@ -8,7 +8,7 @@ class CommentsEntity extends Entity
 {
 	public const ENTITY_PARAMS = [
 		'post_comment' => [
-			'hidden', 'mention'
+			'email_user_from', 'hidden', 'mention'
 		]
 	];
 
@@ -16,20 +16,19 @@ class CommentsEntity extends Entity
 	/**
 	 * Getting comments of tasks or subtasks
 	 *
-	 * @param int $projectId   Required. Project ID
 	 * @param int $taskId      Required. Task ID
-	 * @param int $subtaskId   Optional. Subtask ID
 	 * @param string $extra    Optional. Returns information about files attached to comments. Possible value: `files`
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-comments.html
 	 */
-	public function get_comments(int $projectId, int $taskId, int $subtaskId = 0, string $extra = ''): array
+	public function get_comments(int $taskId, string $extra = ''): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
-		$params = compact('action', 'page', 'extra');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_task' => $taskId,
+			'extra' => $extra
+		];
 		$params = array_filter($params);
 
 		return $this->request($params);
@@ -41,28 +40,23 @@ class CommentsEntity extends Entity
 	 * Creating comments in tasks or subtasks
 	 * This request allows comment file attaching (see https://worksection.com/en/faq/api-files.html)
 	 *
-	 * @param string $emailUserFrom   Required. Comment author email
 	 * @param string $text            Required. Comment text
-	 * @param int $projectId          Required. Project ID
 	 * @param int $taskId             Required. Task ID
-	 * @param int $subtaskId          Optional. Subtask ID
 	 * @param array $optional         Optional. Optional parameters in array, possible keys and values:
+	 *                                email_user_from - comment author email (when use access token - will be set automatically) <br>
 	 *                                hidden - comma separated list of user emails, who will have access to this comment, while it will be hidden for others <br>
 	 *                                mention - comma separated list of user emails, who will be mentioned at the end* of the comment <br>
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-comments.html
 	 */
-	public function post_comment(string $emailUserFrom, string $text, int $projectId, int $taskId, int $subtaskId = 0, array $optional = []): array
+	public function post_comment(string $text, int $taskId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
 		$params = [
 			'action' => $action,
-			'page'   => $page,
-			'email_user_from' => $emailUserFrom,
-			'text' => $text
+			'text' => $text,
+			'id_task' => $taskId
 		];
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {

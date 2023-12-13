@@ -14,7 +14,7 @@ class CostsEntity extends Entity
 			'datestart', 'dateend', 'is_timer'
 		],
 		'add_costs' => [
-			'time', 'money', 'is_rate', 'comment', 'date'
+			'email_user_from', 'time', 'money', 'is_rate', 'comment', 'date'
 		],
 		'update_costs' => [
 			'time', 'money', 'is_rate', 'comment', 'date'
@@ -24,12 +24,11 @@ class CostsEntity extends Entity
 
 
 	/**
-	 * Returns data on entered time and financial costs for tasks and subtasks
+	 * Returns data on entered time and financial costs for projects, tasks and subtasks
 	 * If page parameter is not specified, costs for all account projects will be received
 	 *
-	 * @param int $projectId    Optional. Project ID
-	 * @param int $taskId       Optional. Task ID
-	 * @param int $subtaskId    Optional. Subtask ID
+	 * @param int $projectId    Optional. Project ID (costs for all project)
+	 * @param int $taskId       Optional. Task/subtask ID (costs for tasks/subtasks)
 	 * @param array $optional   Optional. Optional parameters in array, possible keys and values:
 	 *                          datestart - date range for searching data in DD.MM.YYYY format (inclusive) <br>
 	 *                          dateend   - date range for searching data in DD.MM.YYYY format (inclusive) <br>
@@ -46,16 +45,12 @@ class CostsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-costs.html
 	 */
-	public function get_costs(int $projectId = 0, int $taskId = 0, int $subtaskId = 0, array $optional = []): array
+	public function get_costs(int $projectId = 0, int $taskId = 0, array $optional = []): array
 	{
-		$page = '';
 		$action = __FUNCTION__;
-		if ($projectId && $taskId) {
-			$page = '/project/' . $projectId . '/' . $taskId . '/';
-		}
-		if ($page && $subtaskId) $page .= $subtaskId . '/';
 		$params = ['action' => $action];
-		if ($page) $params['page'] = $page;
+		if ($projectId) $params['id_project'] = $projectId;
+		if ($taskId) $params['id_task'] = $taskId;
 
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {
@@ -72,9 +67,8 @@ class CostsEntity extends Entity
 	 * Returns data on total entered time and financial costs of tasks and subtasks for a specified project
 	 * If page parameter is not specified, costs for all account projects will be received
 	 *
-	 * @param int $projectId    Optional. Project ID
-	 * @param int $taskId       Optional. Task ID
-	 * @param int $subtaskId    Optional. Subtask ID
+	 * @param int $projectId    Optional. Project ID (costs for all project)
+	 * @param int $taskId       Optional. Task/subtask ID (costs for tasks/subtasks)
 	 * @param array $optional   Optional. Optional parameters in array, possible keys and values:
 	 *                          datestart - date range for searching data in DD.MM.YYYY format (inclusive) <br>
 	 *                          dateend   - date range for searching data in DD.MM.YYYY format (inclusive) <br>
@@ -85,16 +79,12 @@ class CostsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-costs.html
 	 */
-	public function get_costs_total(int $projectId = 0, int $taskId = 0, int $subtaskId = 0, array $optional = []): array
+	public function get_costs_total(int $projectId = 0, int $taskId = 0, array $optional = []): array
 	{
-		$page = '';
 		$action = __FUNCTION__;
-		if ($projectId && $taskId) {
-			$page = '/project/' . $projectId . '/' . $taskId . '/';
-		}
-		if ($page && $subtaskId) $page .= $subtaskId . '/';
 		$params = ['action' => $action];
-		if ($page) $params['page'] = $page;
+		if ($projectId) $params['id_project'] = $projectId;
+		if ($taskId) $params['id_task'] = $taskId;
 
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {
@@ -110,11 +100,9 @@ class CostsEntity extends Entity
 	/**
 	 * Adds a time/financial cost line for a specified task/subtask
 	 *
-	 * @param string $emailUserFrom   Required. User email, who added an individual cost line
-	 * @param int $projectId          Required. Project ID
 	 * @param int $taskId             Required. Task ID
-	 * @param int $subtaskId          Optional. Subtask ID
 	 * @param array $optional         Optional. Optional parameters in array, possible keys and values:
+	 *                                email_user_from - comment author email (required when use admin token, when use access token - will be set automatically) <br>
 	 *                                time    - time costs in one of the following formats: 0.15 / 0,15 / 0:09 <br>
 	 *                                money   - financial costs in account currency (if it needs to be specified without reference to an hourly rate) <br>
 	 *                                is_rate - financial costs are calculated on an hourly rate (money parameter is ignored). Possible value: `1` <br>
@@ -124,15 +112,12 @@ class CostsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-costs.html
 	 */
-	public function add_costs(string $emailUserFrom, int $projectId, int $taskId, int $subtaskId = 0, array $optional = []): array
+	public function add_costs(int $taskId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
 		$params = [
 			'action' => $action,
-			'page' => $page,
-			'email_user_from' => $emailUserFrom
+			'id_task' => $taskId
 		];
 
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
@@ -150,10 +135,7 @@ class CostsEntity extends Entity
 	 * Updates number of parameters for a specified cost line
 	 * All optional parameters are available for updating
 	 *
-	 * @param int $id                 Required. Cost line unique identifier (can be obtained through get_costs method)
-	 * @param int $projectId          Required. Project ID
-	 * @param int $taskId             Required. Task ID
-	 * @param int $subtaskId          Optional. Subtask ID
+	 * @param int $costsId            Required. Cost line unique identifier (can be obtained through get_costs method)
 	 * @param array $optional         Optional. Optional parameters in array, possible keys and values:
 	 *                                time    - time costs in one of the following formats: 0.15 / 0,15 / 0:09 <br>
 	 *                                money   - financial costs in account currency (if it needs to be specified without reference to an hourly rate) <br>
@@ -164,15 +146,12 @@ class CostsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-costs.html
 	 */
-	public function update_costs(int $id, int $projectId, int $taskId, int $subtaskId = 0, array $optional = []): array
+	public function update_costs(int $costsId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
 		$params = [
 			'action' => $action,
-			'page' => $page,
-			'id' => $id
+			'id_costs' => $costsId
 		];
 
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
@@ -189,23 +168,16 @@ class CostsEntity extends Entity
 	/**
 	 * Deletes a specified cost line from a specific task/subtask
 	 *
-	 * @param int $id           Required. Cost line unique identifier (can be obtained through get_costs method)
-	 * @param int $projectId    Required. Project ID
-	 * @param int $taskId       Required. Task ID
-	 * @param int $subtaskId    Optional. Subtask ID
+	 * @param int $costsId   Required. Cost line unique identifier (can be obtained through get_costs method)
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-costs.html
 	 */
-	public function delete_costs(int $id, int $projectId, int $taskId, int $subtaskId = 0): array
+	public function delete_costs(int $costsId): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
 		$params = [
-			'action' => $action,
-			'page' => $page,
-			'id' => $id
+			'action' => __FUNCTION__,
+			'id_costs' => $costsId
 		];
 
 		return $this->request($params);

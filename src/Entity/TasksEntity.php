@@ -11,15 +11,7 @@ class TasksEntity extends Entity
 			'email_user_from', 'email_user_to', 'priority', 'text', 'todo', 'datestart',
 			'dateend', 'subscribe', 'hidden', 'mention', 'max_time', 'max_money', 'tags'
 		],
-		'post_subtask' => [
-			'email_user_to', 'priority', 'text', 'todo', 'datestart', 'dateend',
-			'subscribe', 'hidden', 'max_time', 'max_money', 'tags'
-		],
 		'update_task' => [
-			'email_user_to', 'priority', 'title', 'datestart',
-			'dateend', 'dateclosed', 'max_time', 'max_money'
-		],
-		'update_subtask' => [
 			'email_user_to', 'priority', 'title', 'datestart',
 			'dateend', 'dateclosed', 'max_time', 'max_money'
 		]
@@ -59,9 +51,7 @@ class TasksEntity extends Entity
 	 * Returns data on a selected open or closed project task/subtask
 	 * Except tasks with delayed publication
 	 *
-	 * @param int $projectId   Required. Project ID
-	 * @param int $taskId      Required. Task ID
-	 * @param int $subtaskId   Optional. Subtask ID (if needed subtask)
+	 * @param int $taskId      Required. Task/subtask ID
 	 * @param string $filter   Optional. Returns data only for open subtasks (when using extra=subtasks parameter). A separate value only for closed subtasks is not provided <br>
 	 *                         Possible value: `active` <br>
 	 * @param string $extra    Optional. Returns additional data on tasks/subtasks (can be specified with commas) <br>
@@ -75,12 +65,14 @@ class TasksEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-task.html
 	 */
-	public function get_task(int $projectId, int $taskId, int $subtaskId = 0, string $filter = '', string $extra = ''): array
+	public function get_task(int $taskId, string $filter = '', string $extra = ''): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
-		$params = compact('action', 'page', 'filter', 'extra');
+		$params = [
+			'action'	 => __FUNCTION__,
+			'id_task'    => $taskId,
+			'filter'     => $filter,
+			'extra'      => $extra
+		];
 		$params = array_filter($params);
 
 		return $this->request($params);
@@ -108,9 +100,12 @@ class TasksEntity extends Entity
 	 */
 	public function get_tasks(int $projectId, string $filter = '', string $extra = ''): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' ;
-		$params = compact('action', 'page', 'filter', 'extra');
+		$params = [
+			'action'	 => __FUNCTION__,
+			'id_project' => $projectId,
+			'filter'     => $filter,
+			'extra'      => $extra
+		];
 		$params = array_filter($params);
 
 		return $this->request($params);
@@ -125,7 +120,7 @@ class TasksEntity extends Entity
 	 * @param int $projectId            Required. Project ID
 	 * @param array $optional           Optional. Optional parameters in array, possible keys and values:
 	 *                                  id_parent       - task id for creating subtask (parent task) <br>
-	 *                                  email_user_from - task author email (required if use admin token) <br>
+	 *                                  email_user_from - task author email (when use access token - will be set automatically) <br>
 	 *                                  email_user_to - task executive email <br>
 	 *                                                  Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned" <br>
 	 *                                  priority      - priority (value range: 0..10) <br>
@@ -158,7 +153,6 @@ class TasksEntity extends Entity
 				$params[$value] = $optional[$value];
 			}
 		}
-		if ($this->_accessToken) $params['email_user_from'] = $this->get_self_email();
 
 		return $this->request($params);
 	}
@@ -166,87 +160,20 @@ class TasksEntity extends Entity
 
 
 	/**
-	 * Creates a subtask in a specified task/subtask
-	 * Parent task/subtask should not be closed!
-	 * This request allows adding files to a subtask description
-	 *
-	 * @param string $title             Required. Subtask name
-	 * @param string $emailUserFrom     Required. Subtask author email
-	 * @param array $optional           Optional. Optional parameters in array, possible keys and values:
-	 *                                  email_user_to - subtask executive email <br>
-	 *                                                  Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned" <br>
-	 *                                  priority      - priority (value range: 0..10) <br>
-	 *                                  text          - subtask description <br>
-	 *                                  todo          - checklist (for example: todo[]=case1&todo[]=case2) <br>
-	 *                                  datestart     - start date in DD.MM.YYYY format <br>
-	 *                                  dateend       - due date or end date in DD.MM.YYYY format <br>
-	 *                                  subscribe     - comma separated list of user emails, who will be subscribed to a subtask <br>
-	 *                                  hidden        - comma separated list of user emails, who will have access to this subtask, while it will be hidden for others <br>
-	 *                                  max_time      - time estimates <br>
-	 *                                  max_money     - financial estimates <br>
-	 *                                  tags          - set subtask statuses/labels. You can specify names (if they are unique) or their IDs (can be obtained through get_tags method) <br>
-	 *                                                  Example value: `TAG1,TAG2` <br>
-	 * @return array
-	 * @throws SdkException
-	 * @link https://worksection.com/en/faq/api-task.html
-	 */
-	public function post_subtask(string $title, string $emailUserFrom, array $optional = []): array
-	{
-		$action = __FUNCTION__;
-		$params = [
-			'action' => $action,
-			'title'  => $title,
-			'email_user_from' => $emailUserFrom
-		];
-		foreach (self::ENTITY_PARAMS[$action] as $value) {
-			if (isset($optional[$value]) && $optional[$value]) {
-				$params[$value] = $optional[$value];
-			}
-		}
-
-		return $this->request($params);
-	}
-
-
-
-	/**
-	 * Closes the specified task
+	 * Closes the specified task/subtask
 	 * Response will show corresponding error if the task is already closed or contains open subtasks
 	 *
-	 * @param int $projectId   Required. Project ID
 	 * @param int $taskId      Required. Task ID
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-task.html
 	 */
-	public function complete_task(int $projectId, int $taskId): array
+	public function complete_task(int $taskId): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		$params = compact('action', 'page');
-
-		return $this->request($params);
-	}
-
-
-
-	/**
-	 * Closes the specified subtask/sub-subtask
-	 * The task should not be already closed and, in the case of a subtask, it should not contain open nested sub-subtasks
-	 *
-	 * @param int $projectId   Required. Project ID
-	 * @param int $taskId      Required. Task ID
-	 * @param int $subtaskId   Required. Subtask ID
-	 * @return array
-	 * @throws SdkException
-	 * @link https://worksection.com/en/faq/api-task.html
-	 */
-	public function complete_subtask(int $projectId, int $taskId, int $subtaskId): array
-	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
-		$params = compact('action', 'page');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_task' => $taskId
+		];
 
 		return $this->request($params);
 	}
@@ -256,39 +183,17 @@ class TasksEntity extends Entity
 	/**
 	 * Reopens the specified task
 	 *
-	 * @param int $projectId   Required. Project ID
 	 * @param int $taskId      Required. Task ID
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-task.html
 	 */
-	public function reopen_task(int $projectId, int $taskId): array
+	public function reopen_task(int $taskId): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		$params = compact('action', 'page');
-
-		return $this->request($params);
-	}
-
-
-
-	/**
-	 * Reopens the specified subtask
-	 *
-	 * @param int $projectId   Required. Project ID
-	 * @param int $taskId      Required. Task ID
-	 * @param int $subtaskId   Required. Subtask ID
-	 * @return array
-	 * @throws SdkException
-	 * @link https://worksection.com/en/faq/api-task.html
-	 */
-	public function reopen_subtask(int $projectId, int $taskId, int $subtaskId): array
-	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
-		$params = compact('action', 'page');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_task' => $taskId
+		];
 
 		return $this->request($params);
 	}
@@ -299,7 +204,6 @@ class TasksEntity extends Entity
 	 * Updates number of parameters for a specified open or closed task
 	 * All optional parameters are available for updating
 	 *
-	 * @param int $projectId    Required. Project ID
 	 * @param int $taskId       Required. Task ID
 	 * @param array $optional   Optional. Optional parameters in array, possible keys and values:
 	 *                          email_user_to - task executive email <br>
@@ -315,13 +219,12 @@ class TasksEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-task.html
 	 */
-	public function update_task(int $projectId, int $taskId, array $optional = []): array
+	public function update_task(int $taskId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
 		$params = [
 			'action' => $action,
-			'page'   => $page
+			'id_task' => $taskId
 		];
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {
@@ -332,46 +235,6 @@ class TasksEntity extends Entity
 		return $this->request($params);
 	}
 
-
-
-	/**
-	 * Updates number of parameters for a specified open or closed subtask (sub-subtask)
-	 * All optional parameters are available for updating
-	 *
-	 * @param int $projectId    Required. Project ID
-	 * @param int $taskId       Required. Task ID
-	 * @param int $subtaskId    Required. Subtask ID
-	 * @param array $optional   Optional. Optional parameters in array, possible keys and values:
-	 *                          email_user_to - subtask executive email <br>
-	 *                                          Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned" <br>
-	 *                          priority      - priority (value range: 0..10) <br>
-	 *                          title         - subtask name <br>
-	 *                          datestart     - start date in DD.MM.YYYY format <br>
-	 *                          dateend       - due date or end date in DD.MM.YYYY format <br>
-	 *                          dateclosed    - closing date in DD.MM.YYYY format <br>
-	 *                          max_time      - time estimates <br>
-	 *                          max_money     - financial estimates <br>
-	 * @return array
-	 * @throws SdkException
-	 * @link https://worksection.com/en/faq/api-task.html
-	 */
-	public function update_subtask(int $projectId, int $taskId, int $subtaskId, array $optional = []): array
-	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
-		$params = [
-			'action' => $action,
-			'page'   => $page
-		];
-		foreach (self::ENTITY_PARAMS[$action] as $value) {
-			if (isset($optional[$value]) && $optional[$value]) {
-				$params[$value] = $optional[$value];
-			}
-		}
-
-		return $this->request($params);
-	}
 
 
 	/**
@@ -379,7 +242,8 @@ class TasksEntity extends Entity
 	 * If page parameter is not specified, data of archive projects will be excluded from search results
 	 *
 	 * At least one of the following parameters is required:
-	 * @param int $projectId            Optional. Project ID
+	 * @param int $projectId            Required. Project ID
+	 * @param int $taskId               Optional. Task ID
 	 * @param string $emailUserFrom     Optional. Task author email
 	 * @param string $emailUserTo       Optional. Task executive email
 	 * @param string $filter            Optional. Search query (see description below): <br>
@@ -405,14 +269,17 @@ class TasksEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-task.html
 	 */
-	public function search_tasks(int $projectId = 0, string $emailUserFrom = '', string $emailUserTo = '', string $filter = '', string $status = ''): array
+	public function search_tasks(int $projectId, int $taskId = 0, string $emailUserFrom = '', string $emailUserTo = '', string $filter = '', string $status = ''): array
 	{
-		$action = __FUNCTION__;
-		$params = compact('action', 'emailUserFrom', 'emailUserTo', 'filter', 'status');
-		if ($projectId) {
-			$page = '/project/' . $projectId . '/';
-			$params['page'] = $page;
-		}
+		$params = [
+			'action' => __FUNCTION__,
+			'id_project' => $projectId,
+			'email_user_from' => $emailUserFrom,
+			'email_user_to' => $emailUserTo,
+			'filter' => $filter,
+			'status' => $status
+		];
+		if ($taskId) $params['id_task'] = $taskId;
 		$params = array_filter($params);
 
 		return $this->request($params);
@@ -436,8 +303,7 @@ class TasksEntity extends Entity
 		$action = __FUNCTION__;
 		$params = compact('action', 'period');
 		if ($projectId) {
-			$page = '/project/' . $projectId . '/';
-			$params['page'] = $page;
+			$params['id_project'] = $projectId;
 		}
 		$params = array_filter($params);
 
