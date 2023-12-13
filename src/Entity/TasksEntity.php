@@ -8,8 +8,8 @@ class TasksEntity extends Entity
 {
 	public const ENTITY_PARAMS = [
 		'post_task' => [
-			'email_user_to', 'priority', 'text', 'todo', 'datestart', 'dateend',
-			'subscribe', 'hidden', 'mention', 'max_time', 'max_money', 'tags'
+			'email_user_from', 'email_user_to', 'priority', 'text', 'todo', 'datestart',
+			'dateend', 'subscribe', 'hidden', 'mention', 'max_time', 'max_money', 'tags'
 		],
 		'post_subtask' => [
 			'email_user_to', 'priority', 'text', 'todo', 'datestart', 'dateend',
@@ -119,11 +119,13 @@ class TasksEntity extends Entity
 
 
 	/**
-	 * Creates a task in a specified project, regardless of its status (active, sleeping, archived)
+	 * Creates a task/subtask in a specified project, regardless of its status (active, sleeping, archived)
 	 *
 	 * @param string $title             Required. Task name
-	 * @param string $emailUserFrom     Required. Task author email
+	 * @param int $projectId            Required. Project ID
 	 * @param array $optional           Optional. Optional parameters in array, possible keys and values:
+	 *                                  id_parent       - task id for creating subtask (parent task) <br>
+	 *                                  email_user_from - task author email (required if use admin token) <br>
 	 *                                  email_user_to - task executive email <br>
 	 *                                                  Possible values: `ANY` for "Anyone", `NOONE` or not specified for "Executive isn't assigned" <br>
 	 *                                  priority      - priority (value range: 0..10) <br>
@@ -143,19 +145,20 @@ class TasksEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-task.html
 	 */
-	public function post_task(string $title, string $emailUserFrom, array $optional = []): array
+	public function post_task(string $title, int $projectId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
 		$params = [
 			'action' => $action,
 			'title'  => $title,
-			'email_user_from' => $emailUserFrom
+			'id_project' => $projectId
 		];
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
 			if (isset($optional[$value]) && $optional[$value]) {
 				$params[$value] = $optional[$value];
 			}
 		}
+		if ($this->_accessToken) $params['email_user_from'] = $this->get_self_email();
 
 		return $this->request($params);
 	}

@@ -16,43 +16,43 @@ class Entity
 	/**
 	 * @var string
 	 */
-	private $_baseUri;
+	protected $_baseUri;
 
 
 	/**
 	 * @var string
 	 */
-	private $_adminToken;
+	protected $_adminToken;
 
 
 	/**
 	 * @var string
 	 */
-	private $_accessToken;
+	protected $_accessToken;
 
 
 	/**
 	 * @var string
 	 */
-	private $_refreshToken;
+	protected $_refreshToken;
 
 
 	/**
 	 * @var string
 	 */
-	private $_clientId;
+	protected $_clientId;
 
 
 	/**
 	 * @var string
 	 */
-	private $_clientSecret;
+	protected $_clientSecret;
 
 
 	/**
 	 * @var bool
 	 */
-	private $_autoRefreshToken;
+	protected $_autoRefreshToken;
 
 
 	/**
@@ -95,12 +95,7 @@ class Entity
 			throw new SdkException('action is required.');
 		}
 		if ($this->_adminToken) {
-			if (isset($params['page'])) {
-				$hash = md5($params['page'] . $params['action'] . $this->_adminToken);
-			} else {
-				$hash = md5($params['action'] . $this->_adminToken);
-			}
-			$params['hash'] = $hash;
+			$params['hash'] = md5(http_build_query($params) . $this->_adminToken);
 			$uri = '/api/admin/v2';
 		} else {
 			$params['access_token'] = $this->_accessToken;
@@ -143,6 +138,20 @@ class Entity
 		}
 
 		return $result;
+	}
+
+
+	/**
+	 * @return string
+	 * @throws SdkException
+	 */
+	protected function get_self_email(): string
+	{
+		$result = $this->request([
+			'action' => 'get_users',
+			'is_me_only' => true
+		]);
+		return $result['data']['email'] ?? '';
 	}
 
 
