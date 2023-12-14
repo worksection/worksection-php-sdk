@@ -304,4 +304,29 @@ class ProjectsEntity extends Entity
 
 		return $this->request($params);
 	}
+
+
+
+	/**
+	 * Returns data on events (performed actions) in projects for a specified period of time (with the information on who and when made changes, as well as versions before and after changes)
+	 * If page parameter is not specified, data for all account projects will be received
+	 *
+	 * @param string $period   Required. Time period (possible ranges: 1m..360m in minutes, 1h .. 72h in hours, 1d..30d in days) <br>
+	 *                         Example value: `3d` <br>
+	 * @param int $projectId   Optional. Project ID for returns the data of the project
+	 * @return array
+	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-task.html
+	 */
+	public function get_events(string $period, int $projectId = 0): array
+	{
+		$action = __FUNCTION__;
+		$params = compact('action', 'period');
+		if ($projectId) {
+			$params['id_project'] = $projectId;
+		}
+		$params = array_filter($params);
+
+		return $this->request($params);
+	}
 }

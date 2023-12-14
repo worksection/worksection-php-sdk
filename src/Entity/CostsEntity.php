@@ -185,36 +185,5 @@ class CostsEntity extends Entity
 
 
 
-	/**
-	 * Returns data on running timers: their ID, start time, timer value and who started them
-	 *
-	 * @return array
-	 * @throws SdkException
-	 * @link https://worksection.com/en/faq/api-costs.html
-	 */
-	public function get_timers(): array
-	{
-		$action = __FUNCTION__;
-		$params = compact('action');
 
-		return $this->request($params);
-	}
-
-
-
-	/**
-	 * Stops the specified running timer and saves its data
-	 *
-	 * @param int $timer    Required. Timer ID (can be obtained through get_timers method)
-	 * @return array
-	 * @throws SdkException
-	 * @link https://worksection.com/en/faq/api-costs.html
-	 */
-	public function stop_timer(int $timer): array
-	{
-		$action = __FUNCTION__;
-		$params = compact('action', 'timer');
-
-		return $this->request($params);
-	}
 }

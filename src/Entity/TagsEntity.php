@@ -115,9 +115,7 @@ class TagsEntity extends Entity
 	 * Sets new and removes previous task/subtask statuses and labels
 	 * Statuses and labels can be specified by their names (full match) or ID (can be obtained through get_tags method)
 	 *
-	 * @param int $projectId    Required. Project ID
-	 * @param int $taskId       Required. Task ID
-	 * @param int $subtaskId    Required. Subtask ID
+	 * @param int $taskId       Required. Task/subtask ID
 	 * @param array $optional   Optional. Optional parameters in array, possible keys and values:
 	 *                          plus  - comma separated list of status and label names to be set <br>
 	 *                          minus - comma separated list of status and label names to be removed <br>
@@ -125,14 +123,12 @@ class TagsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function update_tags(int $projectId, int $taskId, int $subtaskId = 0, array $optional = []): array
+	public function update_tags(int $taskId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
 		$params = [
 			'action' => $action,
-			'page' => $page
+			'id_task' => $taskId
 		];
 
 		foreach (self::ENTITY_PARAMS[$action] as $value) {
@@ -170,8 +166,6 @@ class TagsEntity extends Entity
 	 * Statuses and labels can be specified by their names (full match) or ID (can be obtained through get_project_tags method)
 	 *
 	 * @param int $projectId    Required. Project ID
-	 * @param int $taskId       Required. Task ID
-	 * @param int $subtaskId    Required. Subtask ID
 	 * @param array $optional   Optional. Optional parameters in array, possible keys and values:
 	 *                          plus  - comma separated list of project status and label names to be set <br>
 	 *                          minus - comma separated list of project status and label names to be removed <br>
@@ -179,14 +173,12 @@ class TagsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function update_project_tags(int $projectId, int $taskId, int $subtaskId = 0, array $optional = []): array
+	public function update_project_tags(int $projectId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		if ($subtaskId) $page .= $subtaskId . '/';
 		$params = [
 			'action' => $action,
-			'page' => $page
+			'id_project' => $projectId
 		];
 
 		foreach (self::ENTITY_PARAMS[$action] as $value) {

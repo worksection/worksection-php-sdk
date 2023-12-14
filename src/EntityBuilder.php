@@ -8,6 +8,8 @@ use Worksection\SDK\Entity\MembersEntity;
 use Worksection\SDK\Entity\ProjectsEntity;
 use Worksection\SDK\Entity\TagsEntity;
 use Worksection\SDK\Entity\TasksEntity;
+use Worksection\SDK\Entity\TimersEntity;
+use Worksection\SDK\Entity\WebhooksEntity;
 use Worksection\SDK\Exception\SdkException;
 
 class EntityBuilder
@@ -178,6 +180,26 @@ class EntityBuilder
 	public function createFilesEntity(): FilesEntity
 	{
 		return new FilesEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return TimersEntity
+	 * @throws SdkException
+	 */
+	public function createTimersEntity(): TimersEntity
+	{
+		return new TimersEntity($this->configWrap());
+	}
+
+
+	/**
+	 * @return WebhooksEntity
+	 * @throws SdkException
+	 */
+	public function createWebhooksEntity(): WebhooksEntity
+	{
+		return new WebhooksEntity($this->configWrap());
 	}
 
 

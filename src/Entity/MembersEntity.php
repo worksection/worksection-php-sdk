@@ -16,6 +16,24 @@ class MembersEntity extends Entity
 	];
 
 
+	/**
+	 * Returns info about authorized user (oauth2)
+	 * !! User method (only for access token) !!
+	 *
+	 * @return array
+	 * @throws SdkException
+	 */
+	public function me(): array
+	{
+		$params = ['action' => __FUNCTION__];
+		if (!isset($this->_accessToken)) {
+			throw new SdkException('MembersEntity me method is available for OAuth2 only.');
+		}
+
+		return $this->request($params);
+	}
+
+
 
 	/**
 	 * Returns account users data
@@ -26,8 +44,7 @@ class MembersEntity extends Entity
 	 */
 	public function get_users(): array
 	{
-		$action = __FUNCTION__;
-		$params = compact('action');
+		$params = ['action' => __FUNCTION__];
 
 		return $this->request($params);
 	}
@@ -122,20 +139,21 @@ class MembersEntity extends Entity
 
 
 	/**
-	 * Subscribing a user from a task
+	 * Subscribing a user from a task/subtask
 	 *
-	 * @param int $projectId      Required. Project ID
-	 * @param int $taskId         Required. Task ID
+	 * @param int $taskId         Required. Task/subtask ID
 	 * @param string $emailUser   Required. User email, who needs to be subscribed from a task
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-user.html
 	 */
-	public function subscribe(int $projectId, int $taskId, string $emailUser): array
+	public function subscribe(int $taskId, string $emailUser): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		$params = compact('action', 'page', 'emailUser');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_task' => $taskId,
+			'email_user' => $emailUser
+		];
 
 		return $this->request($params);
 	}
@@ -143,20 +161,21 @@ class MembersEntity extends Entity
 
 
 	/**
-	 * Unsubscribing a user from a task
+	 * Unsubscribing a user from a task/subtask
 	 *
-	 * @param int $projectId      Required. Project ID
-	 * @param int $taskId         Required. Task ID
+	 * @param int $taskId         Required. Task/subtask ID
 	 * @param string $emailUser   Required. User email, who needs to be unsubscribed from a task
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-user.html
 	 */
-	public function unsubscribe(int $projectId, int $taskId, string $emailUser): array
+	public function unsubscribe(int $taskId, string $emailUser): array
 	{
-		$action = __FUNCTION__;
-		$page = '/project/' . $projectId . '/' . $taskId . '/';
-		$params = compact('action', 'page', 'emailUser');
+		$params = [
+			'action' => __FUNCTION__,
+			'id_task' => $taskId,
+			'email_user' => $emailUser
+		];
 
 		return $this->request($params);
 	}
