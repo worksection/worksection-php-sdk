@@ -207,14 +207,14 @@ $result = $projectsEntity->get_projects();
 
 **[TagsEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/TagsEntity.php)** - [api docs](https://worksection.com/en/faq/api-tags.html), methods:
 ```php
-- get_tag_groups(string $type = '', string $access = '')
+- get_task_tag_groups(string $type = '', string $access = '')
 - get_project_tag_groups(string $type = '', string $access = '')
-- get_tags(string $group = '', string $type = '', string $access = '')
+- get_task_tags(string $group = '', string $type = '', string $access = '')
 - get_project_tags(string $group = '', string $type = '', string $access = '')
-- add_tag_groups(string $type, string $access, string $title)
+- add_task_tag_groups(string $type, string $access, string $title)
 - add_project_tag_groups(string $type, string $access, string $title)
-- add_tags(string $group, string $title)
-- update_tags(int $taskId, array $optional = [])
+- add_task_tags(string $group, string $title)
+- update_task_tags(int $taskId, array $optional = [])
 - add_project_tags(string $group, string $title)
 - update_project_tags(int $projectId, array $optional = [])
 ```
@@ -247,7 +247,7 @@ $result = $projectsEntity->get_projects();
 **[WebhooksEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/WebhooksEntity.php)** - [api docs](https://worksection.com/en/faq/webhooks.html), methods:
 ```php
 - get_webhooks()
-- add_webhook(string $url, string $events, string $projects = '', string $httpUser = '', string $httpPassword = '')
+- add_webhook(string $url, string $events, string $projectIds = '', string $httpUser = '', string $httpPassword = '')
 - delete_webhook(int $webhookId)
 ```
 

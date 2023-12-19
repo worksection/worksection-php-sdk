@@ -27,21 +27,21 @@ class WebhooksEntity extends Entity
 	 * @param string $url            Required. Webhook URL
 	 * @param string $events         Required. The event settings that will send notifications to the specified URL are separated by commas.
 	 *                                         Possible values: post_task, post_comment, post_project, update_task, update_comment, update_project, delete_task, delete_comment, close_task
-	 * @param string $projects       Optional. Project IDs separated by commas, specify if you want to limit the sending of events for certain projects
+	 * @param string $projectIds     Optional. Project IDs separated by commas, specify if you want to limit the sending of events for certain projects
 	 * @param string $httpUser       Optional. User when using basic access authentication
 	 * @param string $httpPassword   Optional. Password when using basic access authentication
 	 * @return array
 	 * @throws SdkException
 	 * @see https://worksection.com/en/faq/webhooks.html
 	 */
-	public function add_webhook(string $url, string $events, string $projects = '', string $httpUser = '', string $httpPassword = ''): array
+	public function add_webhook(string $url, string $events, string $projectIds = '', string $httpUser = '', string $httpPassword = ''): array
 	{
 		$params = [
 			'action' => __FUNCTION__,
 			'url' => $url,
 			'events' => $events
 		];
-		if ($projects) $params['projects'] = $projects;
+		if ($projectIds) $params['projects'] = $projectIds;
 		if ($httpUser) $params['http_user'] = $httpUser;
 		if ($httpPassword) $params['http_pass'] = $httpPassword;
 

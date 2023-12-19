@@ -27,7 +27,7 @@ class TagsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function get_tag_groups(string $type = '', string $access = ''): array
+	public function get_task_tag_groups(string $type = '', string $access = ''): array
 	{
 		$action = __FUNCTION__;
 		$params = compact('action', 'type', 'access');
@@ -71,7 +71,7 @@ class TagsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function get_tags(string $group = '', string $type = '', string $access = ''): array
+	public function get_task_tags(string $group = '', string $type = '', string $access = ''): array
 	{
 		$action = __FUNCTION__;
 		$params = compact('action', 'group', 'type', 'access');
@@ -115,7 +115,7 @@ class TagsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function add_tag_groups(string $type, string $access, string $title): array
+	public function add_task_tag_groups(string $type, string $access, string $title): array
 	{
 		$action = __FUNCTION__;
 		$params = compact('action', 'type', 'access', 'title');
@@ -154,7 +154,7 @@ class TagsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function add_tags(string $group, string $title): array
+	public function add_task_tags(string $group, string $title): array
 	{
 		$action = __FUNCTION__;
 		$params = compact('action', 'group', 'title');
@@ -175,7 +175,7 @@ class TagsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function update_tags(int $taskId, array $optional = []): array
+	public function update_task_tags(int $taskId, array $optional = []): array
 	{
 		$action = __FUNCTION__;
 		$params = [
