@@ -22,7 +22,6 @@ class CostsEntity extends Entity
 	];
 
 
-
 	/**
 	 * Returns data on entered time and financial costs for projects, tasks and subtasks
 	 * If page parameter is not specified, costs for all account projects will be received
@@ -62,7 +61,6 @@ class CostsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Returns data on total entered time and financial costs of tasks and subtasks for a specified project
 	 * If page parameter is not specified, costs for all account projects will be received
@@ -94,7 +92,6 @@ class CostsEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -130,7 +127,6 @@ class CostsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Updates number of parameters for a specified cost line
 	 * All optional parameters are available for updating
@@ -164,7 +160,6 @@ class CostsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Deletes a specified cost line from a specific task/subtask
 	 *
@@ -182,8 +177,4 @@ class CostsEntity extends Entity
 
 		return $this->request($params);
 	}
-
-
-
-
 }

@@ -34,7 +34,6 @@ class MembersEntity extends Entity
 	}
 
 
-
 	/**
 	 * Returns account users data
 	 *
@@ -48,7 +47,6 @@ class MembersEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -65,7 +63,6 @@ class MembersEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -98,7 +95,6 @@ class MembersEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -137,7 +133,6 @@ class MembersEntity extends Entity
 	}
 
 
-
 	/**
 	 * Subscribing a user from a task/subtask
 	 *
@@ -157,7 +152,6 @@ class MembersEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -181,7 +175,6 @@ class MembersEntity extends Entity
 	}
 
 
-
 	/**
 	 * Checks for the possible existence of such team and creates a new one if necessary
 	 *
@@ -201,7 +194,6 @@ class MembersEntity extends Entity
 	}
 
 
-
 	/**
 	 * Checks for the possible existence of such folder and creates a new one if necessary
 	 *
@@ -219,7 +211,6 @@ class MembersEntity extends Entity
 	}
 
 
-
 	/**
 	 * Returns data on account user teams
 	 *
@@ -234,7 +225,6 @@ class MembersEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**

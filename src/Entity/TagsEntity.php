@@ -16,18 +16,66 @@ class TagsEntity extends Entity
 	];
 
 
-
 	/**
 	 * Returns data on status and label groups
 	 *
+	 * @param string $type        Optional. Group type, possible values: `status` or `label`
+	 * @param string $access      Optional. Visibility of labels of a certain label group, possible values:
+	 *                                      public  - available to all teams (including external client teams)
+	 *                                      private - available only for your company teams
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function get_tag_groups(): array
+	public function get_tag_groups(string $type = '', string $access = ''): array
 	{
 		$action = __FUNCTION__;
-		$params = compact('action');
+		$params = compact('action', 'type', 'access');
+		$params = array_filter($params);
+
+		return $this->request($params);
+	}
+
+
+	/**
+	 * Returns data on project status and label groups
+	 *
+	 * @param string $type        Optional. Group type, possible values: `status` or `label`
+	 * @param string $access      Optional. Visibility of labels of a certain label group, possible values:
+	 *                                      `public`  - available to all teams (including external client teams)
+	 *                                      `private` - available only for your company teams
+	 * @return array
+	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-tags.html
+	 */
+	public function get_project_tag_groups(string $type = '', string $access = ''): array
+	{
+		$action = __FUNCTION__;
+		$params = compact('action', 'type', 'access');
+		$params = array_filter($params);
+
+		return $this->request($params);
+	}
+
+
+	/**
+	 * Returns data on all statuses and labels along with the groups they belong to
+	 *
+	 * @param string $group   Optional. Returns data of one specified group. You can specify the name of the group or its ID <br>
+	 *                                  (can be obtained through the same method from the returned group parameter or through get_tag_groups method) <br>
+	 * @param string $type    Optional. Group type, possible values: `status` or `label`
+	 * @param string $access  Optional. Visibility of labels of a certain label group, possible values:
+	 *                                  `public`  - available to all teams (including external client teams)
+	 *                                  `private` - available only for your company teams
+	 * @return array
+	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-tags.html
+	 */
+	public function get_tags(string $group = '', string $type = '', string $access = ''): array
+	{
+		$action = __FUNCTION__;
+		$params = compact('action', 'group', 'type', 'access');
+		$params = array_filter($params);
 
 		return $this->request($params);
 	}
@@ -36,38 +84,23 @@ class TagsEntity extends Entity
 	/**
 	 * Returns data on all project statuses and labels along with the groups they belong to
 	 *
+	 * @param string $group Optional. Returns data of one specified group. You can specify the name of the group or its ID <br>
+	 *                                   (can be obtained through the same method from the returned group parameter or through get_tag_groups method) <br>
+	 * @param string $type Optional. Group type, possible values: `status` or `label`
+	 * @param string $access Optional. Visibility of labels of a certain label group, possible values:
+	 *                                   `public`  - available to all teams (including external client teams)
+	 *                                   `private` - available only for your company teams
 	 * @return array
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-tags.html
 	 */
-	public function get_project_tags(): array
+	public function get_project_tags(string $group = '', string $type = '', string $access = ''): array
 	{
 		$action = __FUNCTION__;
-		$params = compact('action');
+		$params = compact('action', 'group', 'type', 'access');
 
 		return $this->request($params);
 	}
-
-
-
-	/**
-	 * Returns data on all statuses and labels along with the groups they belong to
-	 *
-	 * @param string $group   Optional. Returns data of one specified group. You can specify the name of the group or its ID <br>
-	 *                                  (can be obtained through the same method from the returned group parameter or through get_tag_groups method) <br>
-	 * @return array
-	 * @throws SdkException
-	 * @link https://worksection.com/en/faq/api-tags.html
-	 */
-	public function get_tags(string $group = ''): array
-	{
-		$action = __FUNCTION__;
-		$params = compact('action', 'group');
-		$params = array_filter($params);
-
-		return $this->request($params);
-	}
-
 
 
 	/**
@@ -91,6 +124,26 @@ class TagsEntity extends Entity
 	}
 
 
+	/**
+	 * Checks for the possible existence of project status or label groups with specified names and creates new ones if necessary
+	 *
+	 * @param string $type    Required. Group type, possible values: `status`, `label`
+	 * @param string $access  Required. Visibility of labels of a certain label group (statuses are always visible and have public value), possible values: <br>
+	 *                                  `public`  - available to all teams (including external client teams) <br>
+	 *                                  `private` - available only for your company teams <br>
+	 * @param string $title   Required. Comma separated list of group names
+	 * @return array
+	 * @throws SdkException
+	 * @link https://worksection.com/en/faq/api-tags.html
+	 */
+	public function add_project_tag_groups(string $type, string $access, string $title): array
+	{
+		$action = __FUNCTION__;
+		$params = compact('action', 'type', 'access', 'title');
+
+		return $this->request($params);
+	}
+
 
 	/**
 	 * Checks for the possible existence of statuses or labels with specified names and creates new ones if necessary
@@ -108,7 +161,6 @@ class TagsEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -141,7 +193,6 @@ class TagsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Checks for the possible existence of project statuses or labels with specified names and creates new ones if necessary
 	 *
@@ -158,7 +209,6 @@ class TagsEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**

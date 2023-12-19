@@ -53,7 +53,6 @@ class FilesEntity extends Entity
 	}
 
 
-
 	/**
 	 * Allows getting list of files in (project description, task/subtask description and comments)
 	 *

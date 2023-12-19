@@ -28,7 +28,6 @@ class ProjectsEntity extends Entity
 	];
 
 
-
 	/**
 	 * Returns data on all projects
 	 *
@@ -50,7 +49,6 @@ class ProjectsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Archives the specified project
 	 * Response will show corresponding error if the project is already archived
@@ -68,7 +66,6 @@ class ProjectsEntity extends Entity
 		];
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -128,7 +125,6 @@ class ProjectsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Updates number of parameters for a specified active project
 	 * All optional parameters are available for updating
@@ -183,7 +179,6 @@ class ProjectsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Returns data with folder names, their IDs and type
 	 *
@@ -201,7 +196,6 @@ class ProjectsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Checks for the possible existence of a folder with the specified name and creates a new one if necessary
 	 *
@@ -217,7 +211,6 @@ class ProjectsEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -241,7 +234,6 @@ class ProjectsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Adds account users to the project team
 	 *
@@ -261,7 +253,6 @@ class ProjectsEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -285,7 +276,6 @@ class ProjectsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Activates the specified archived project
 	 * Response will show corresponding error if the project is already active
@@ -304,7 +294,6 @@ class ProjectsEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**

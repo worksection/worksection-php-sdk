@@ -177,7 +177,7 @@ $result = $projectsEntity->get_projects();
 - get_all_tasks(string $filter = '', string $extra = '')
 - get_task(int $taskId, string $filter = '', string $extra = '')
 - get_tasks(int $projectId, string $filter = '', string $extra = '')
-- post_task(string $title, int $projectId, array $optional = [])
+- post_task(int $projectId, string $title, array $optional = [])
 - complete_task(int $taskId)
 - reopen_task(int $taskId)
 - update_task(int $taskId, array $optional = [])
@@ -202,15 +202,17 @@ $result = $projectsEntity->get_projects();
 **[CommentsEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/CommentsEntity.php)** - [api docs](https://worksection.com/en/faq/api-comments.html), methods:
 ```php
 - get_comments(int $taskId, string $extra = '')
-- post_comment(string $text, int $taskId, array $optional = [])
+- post_comment(int $taskId, string $text, array $optional = [])
 ```
 
 **[TagsEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/TagsEntity.php)** - [api docs](https://worksection.com/en/faq/api-tags.html), methods:
 ```php
-- get_tag_groups()
-- get_project_tags()
-- get_tags(string $group = '')
+- get_tag_groups(string $type = '', string $access = '')
+- get_project_tag_groups(string $type = '', string $access = '')
+- get_tags(string $group = '', string $type = '', string $access = '')
+- get_project_tags(string $group = '', string $type = '', string $access = '')
 - add_tag_groups(string $type, string $access, string $title)
+- add_project_tag_groups(string $type, string $access, string $title)
 - add_tags(string $group, string $title)
 - update_tags(int $taskId, array $optional = [])
 - add_project_tags(string $group, string $title)

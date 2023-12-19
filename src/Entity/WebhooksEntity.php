@@ -21,7 +21,6 @@ class WebhooksEntity extends Entity
 	}
 
 
-
 	/**
 	 * Add new webhooks into account with params
 	 *
@@ -48,7 +47,6 @@ class WebhooksEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**

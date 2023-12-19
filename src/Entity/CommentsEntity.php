@@ -35,13 +35,12 @@ class CommentsEntity extends Entity
 	}
 
 
-
 	/**
 	 * Creating comments in tasks or subtasks
 	 * This request allows comment file attaching (see https://worksection.com/en/faq/api-files.html)
 	 *
-	 * @param string $text            Required. Comment text
 	 * @param int $taskId             Required. Task ID
+	 * @param string $text            Required. Comment text
 	 * @param array $optional         Optional. Optional parameters in array, possible keys and values:
 	 *                                email_user_from - comment author email (when use access token - will be set automatically) <br>
 	 *                                hidden - comma separated list of user emails, who will have access to this comment, while it will be hidden for others <br>
@@ -50,7 +49,7 @@ class CommentsEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-comments.html
 	 */
-	public function post_comment(string $text, int $taskId, array $optional = []): array
+	public function post_comment(int $taskId, string $text, array $optional = []): array
 	{
 		$action = __FUNCTION__;
 		$params = [

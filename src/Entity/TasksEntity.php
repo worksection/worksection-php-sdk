@@ -18,7 +18,6 @@ class TasksEntity extends Entity
 	];
 
 
-
 	/**
 	 * Returns data on all open and closed account tasks/subtasks
 	 * Except tasks with delayed publication
@@ -44,7 +43,6 @@ class TasksEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -79,7 +77,6 @@ class TasksEntity extends Entity
 	}
 
 
-
 	/**
 	 * Returns data on a selected open or closed project task/subtask
 	 * Except tasks with delayed publication
@@ -112,12 +109,11 @@ class TasksEntity extends Entity
 	}
 
 
-
 	/**
 	 * Creates a task/subtask in a specified project, regardless of its status (active, sleeping, archived)
 	 *
-	 * @param string $title             Required. Task name
 	 * @param int $projectId            Required. Project ID
+	 * @param string $title             Required. Task name
 	 * @param array $optional           Optional. Optional parameters in array, possible keys and values:
 	 *                                  id_parent       - task id for creating subtask (parent task) <br>
 	 *                                  email_user_from - task author email (when use access token - will be set automatically) <br>
@@ -140,7 +136,7 @@ class TasksEntity extends Entity
 	 * @throws SdkException
 	 * @link https://worksection.com/en/faq/api-task.html
 	 */
-	public function post_task(string $title, int $projectId, array $optional = []): array
+	public function post_task(int $projectId, string $title, array $optional = []): array
 	{
 		$action = __FUNCTION__;
 		$params = [
@@ -156,7 +152,6 @@ class TasksEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -179,7 +174,6 @@ class TasksEntity extends Entity
 	}
 
 
-
 	/**
 	 * Reopens the specified task
 	 *
@@ -197,7 +191,6 @@ class TasksEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
@@ -234,7 +227,6 @@ class TasksEntity extends Entity
 
 		return $this->request($params);
 	}
-
 
 
 	/**
