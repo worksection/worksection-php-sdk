@@ -1,11 +1,11 @@
-# Worksection SDK
+# Worksection PHP SDK
 
-This package provides Worksection SDK. Support admin token auth and OAuth2 Flow.
+This package provides Worksection PHP SDK. Support admin token auth and OAuth2 Flow.
 
 ## Installation
 
 ```
-composer require worksection/worksection-sdk
+composer require worksection/worksection-php-sdk
 ```
 
 
@@ -157,7 +157,7 @@ $result = $projectsEntity->get_projects();
 
 ## Available Entities and Methods
 
-**[ProjectsEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/ProjectsEntity.php)** - [api docs](https://worksection.com/en/faq/api-projects.html), methods:
+**[ProjectsEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/ProjectsEntity.php)** - [api docs](https://worksection.com/en/faq/api-projects.html), methods:
 ```php
 - get_projects(string $filter = '', string $extra = '')
 - close_project(int $projectId)
@@ -172,7 +172,7 @@ $result = $projectsEntity->get_projects();
 - get_events(string $period, int $projectId = 0)
 ```
 
-**[TasksEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/TasksEntity.php)** - [api docs](https://worksection.com/en/faq/api-task.html), methods:
+**[TasksEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/TasksEntity.php)** - [api docs](https://worksection.com/en/faq/api-task.html), methods:
 ```php
 - get_all_tasks(string $filter = '', string $extra = '')
 - get_task(int $taskId, string $filter = '', string $extra = '')
@@ -184,7 +184,7 @@ $result = $projectsEntity->get_projects();
 - search_tasks(int $projectId, int $taskId = 0, string $emailUserFrom = '', string $emailUserTo = '', string $filter = '', string $status = '')
 ```
 
-**[MembersEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/MembersEntity.php)** - [api docs](https://worksection.com/en/faq/api-user.html), methods:
+**[MembersEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/MembersEntity.php)** - [api docs](https://worksection.com/en/faq/api-user.html), methods:
 ```php
 - me()                          - User method (only for access token)
 - get_users()
@@ -199,13 +199,13 @@ $result = $projectsEntity->get_projects();
 - get_contact_groups()
 ```
 
-**[CommentsEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/CommentsEntity.php)** - [api docs](https://worksection.com/en/faq/api-comments.html), methods:
+**[CommentsEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/CommentsEntity.php)** - [api docs](https://worksection.com/en/faq/api-comments.html), methods:
 ```php
 - get_comments(int $taskId, string $extra = '')
 - post_comment(int $taskId, string $text, array $optional = [])
 ```
 
-**[TagsEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/TagsEntity.php)** - [api docs](https://worksection.com/en/faq/api-tags.html), methods:
+**[TagsEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/TagsEntity.php)** - [api docs](https://worksection.com/en/faq/api-tags.html), methods:
 ```php
 - get_task_tag_groups(string $type = '', string $access = '')
 - get_project_tag_groups(string $type = '', string $access = '')
@@ -219,7 +219,7 @@ $result = $projectsEntity->get_projects();
 - update_project_tags(int $projectId, array $optional = [])
 ```
 
-**[CostsEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/CostsEntity.php)** - [api docs](https://worksection.com/en/faq/api-costs.html), methods:
+**[CostsEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/CostsEntity.php)** - [api docs](https://worksection.com/en/faq/api-costs.html), methods:
 ```php
 - get_costs(int $projectId = 0, int $taskId = 0, array $optional = [])
 - get_costs_total(int $projectId = 0, int $taskId = 0, array $optional = [])
@@ -228,7 +228,7 @@ $result = $projectsEntity->get_projects();
 - delete_costs(int $costsId)
 ```
 
-**[TimersEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/TimersEntity.php)** - [api docs](https://worksection.com/en/faq/api-costs.html), methods:
+**[TimersEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/TimersEntity.php)** - [api docs](https://worksection.com/en/faq/api-costs.html), methods:
 ```php
 - get_my_timer()                      - User method (only for access token)
 - start_my_timer(int $taskId)         - User method (only for access token)
@@ -238,13 +238,13 @@ $result = $projectsEntity->get_projects();
 - stop_timer(int $timer)              - Admin method (only for admin token)
 ```
 
-**[FilesEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/FilesEntity.php)** - [api docs](https://worksection.com/en/faq/api-files.html), methods:
+**[FilesEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/FilesEntity.php)** - [api docs](https://worksection.com/en/faq/api-files.html), methods:
 ```php
 - download(int $fileId)
 - get_files(int $projectId, int $taskId = 0)
 ```
 
-**[WebhooksEntity](https://github.com/worksection/worksection-sdk/blob/develop/src/Entity/WebhooksEntity.php)** - [api docs](https://worksection.com/en/faq/webhooks.html), methods:
+**[WebhooksEntity](https://github.com/worksection/worksection-php-sdk/blob/develop/src/Entity/WebhooksEntity.php)** - [api docs](https://worksection.com/en/faq/webhooks.html), methods:
 ```php
 - get_webhooks()
 - add_webhook(string $url, string $events, string $projectIds = '', string $httpUser = '', string $httpPassword = '')
